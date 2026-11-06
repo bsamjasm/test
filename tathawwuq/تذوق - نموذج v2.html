@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#5b4fe8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<title>تذوق – لوحة التحكم</title>
+<style>
+:root{--bg:#f4f5fb;--card:#fff;--tx:#161b2e;--mut:#6b7290;--pri:#5b4fe8;--pri2:#9b5cf6;--bd:#e5e7f5;--chip:#eef0fc;--red:#e11d48;--glass:rgba(255,255,255,.72);--sh:0 1px 2px #16182e0d,0 14px 30px #16182e12;color-scheme:light}
+@media(prefers-color-scheme:dark){:root{--bg:#0a0c16;--card:#141726;--tx:#eef0fb;--mut:#8d93b8;--pri:#8d7dff;--pri2:#c08bff;--bd:#232a46;--chip:#1b2038;--red:#fb7185;--glass:rgba(20,23,38,.6);--sh:none;color-scheme:dark}}
+*{box-sizing:border-box;margin:0}
+body{background:var(--bg);color:var(--tx);font-family:Cairo,Tahoma,"Segoe UI",Arial,sans-serif;font-size:15px;max-width:680px;min-height:100vh;margin:auto;padding-bottom:calc(98px + env(safe-area-inset-bottom,0px))}
+header{position:relative;overflow:hidden;padding:calc(20px + env(safe-area-inset-top,0px)) 20px 20px;background:linear-gradient(140deg,var(--pri) 0%,var(--pri2) 100%);color:#fff;border-radius:0 0 30px 30px;box-shadow:var(--sh)}
+.blob{position:absolute;border-radius:50%;filter:blur(38px);opacity:.5;pointer-events:none;z-index:0}
+.b1{width:190px;height:190px;background:#ffd27a;top:-80px;left:-50px}
+.b2{width:170px;height:170px;background:#ff6fae;bottom:-90px;right:-40px}
+.topin{position:relative;z-index:1}
+.kicker{display:inline-block;background:#ffffff28;backdrop-filter:blur(6px);padding:5px 13px;border-radius:99px;font-size:11.5px;font-weight:700;margin-bottom:9px}
+header h1{font-size:23px;font-weight:900;letter-spacing:-.3px}
+header p{font-size:13px;opacity:.92;margin-top:4px;font-weight:600;max-width:36ch}
+.hstats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px}
+.hstats div{background:#ffffff1e;backdrop-filter:blur(8px);border:1px solid #ffffff2c;border-radius:16px;padding:10px 4px;text-align:center}
+.hstats b{display:block;font-size:19px;font-weight:900}
+.hstats span{font-size:10.5px;opacity:.9}
+main{padding:14px 16px}
+h3{margin:18px 2px 8px;font-size:12.5px;color:var(--mut);font-weight:700}
+nav{position:fixed;bottom:calc(12px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);width:min(92%,560px);display:flex;background:var(--glass);backdrop-filter:blur(18px);border:1px solid var(--bd);border-radius:24px;box-shadow:var(--sh);padding:6px;z-index:8}
+nav button{flex:1;background:none;border:0;color:var(--mut);font:inherit;display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 2px;border-radius:18px;cursor:pointer}
+nav button .ic svg{width:20px;height:20px;display:block}
+nav button em{font-style:normal;font-size:10.5px;font-weight:700}
+nav button.on{color:#fff;background:linear-gradient(135deg,var(--pri),var(--pri2))}
+input,select,textarea{width:100%;padding:11px 13px;border:1px solid var(--bd);border-radius:13px;background:var(--card);color:var(--tx);font:inherit;margin:5px 0;outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--pri);box-shadow:0 0 0 3px color-mix(in srgb,var(--pri) 18%,transparent)}
+.btn{width:100%;background:linear-gradient(135deg,var(--pri),var(--pri2));color:#fff;border:0;border-radius:13px;padding:12px;font:inherit;font-weight:800;cursor:pointer;margin-top:8px}
+.btn.s{background:var(--chip);color:var(--tx)}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:18px;padding:14px;margin:10px 0;box-shadow:var(--sh)}
+.row{display:flex;gap:10px;align-items:center}
+.img{width:50px;height:50px;border-radius:14px;background:var(--chip);display:flex;align-items:center;justify-content:center;font-size:26px;flex:none;overflow:hidden}
+.img img{width:100%;height:100%;object-fit:cover}
+.mut{color:var(--mut);font-size:13px}
+.sm{background:var(--chip);border:0;color:var(--tx);border-radius:10px;padding:7px 11px;font:inherit;font-weight:700;font-size:12px;cursor:pointer}
+.sm.d{color:var(--red)}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:4px 0;scrollbar-width:none}
+.chips.wrap{flex-wrap:wrap;overflow:visible}
+.chip{background:var(--card);border:1px solid var(--bd);color:var(--tx);border-radius:99px;padding:7px 14px;font:inherit;font-size:13px;white-space:nowrap;cursor:pointer}
+.chip.on{background:var(--pri);border-color:var(--pri);color:#fff}
+.chip.x{cursor:default;padding:5px 6px 5px 12px;display:inline-flex;gap:6px;align-items:center}
+.chip.x b{color:var(--red);cursor:pointer;padding:0 4px}
+.sel{display:flex;gap:6px}.sel>*{flex:1}
+.ph{width:100%;height:130px;border:2px dashed var(--bd);border-radius:16px;display:flex;align-items:center;justify-content:center;color:var(--mut);cursor:pointer;overflow:hidden;background:var(--chip)}
+.ph img{width:100%;height:100%;object-fit:cover}
+.em{font-size:22px;background:var(--chip);border:2px solid transparent;border-radius:12px;padding:4px 8px;cursor:pointer}.em.on{border-color:var(--pri)}
+label.ck{display:inline-flex;gap:6px;align-items:center;background:var(--chip);border-radius:99px;padding:7px 13px;margin:3px;font-size:13px}
+label.ck input{width:auto;margin:0}
+.mi{border:1px solid var(--bd);border-radius:14px;padding:10px;margin:8px 0}
+#sheet{position:fixed;inset:0;background:#0b0d1880;display:none;align-items:flex-end;justify-content:center;z-index:9}
+#sheet.show{display:flex}
+#box{background:var(--bg);width:100%;max-width:680px;max-height:86%;overflow-y:auto;border-radius:26px 26px 0 0;padding:18px 16px calc(18px + env(safe-area-inset-bottom,0px))}
+.hero{height:120px;border-radius:18px;background:var(--chip);display:flex;align-items:center;justify-content:center;font-size:54px;overflow:hidden}
+.hero img{width:100%;height:100%;object-fit:cover}
+.toast{position:fixed;top:calc(14px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);background:var(--tx);color:var(--bg);padding:9px 18px;border-radius:99px;font-size:13px;font-weight:700;display:none;z-index:20;box-shadow:var(--sh)}
+</style>
+</head>
+<body>
+<header>
+ <div class="blob b1"></div><div class="blob b2"></div>
+ <div class="topin">
+  <span class="kicker">🧪 نموذج تجريبي</span>
+  <h1>لوحة تحكم تذوق</h1>
+  <p>أدر المطاعم والمحافظات والإشعارات من مكان واحد</p>
+  <div class="hstats"><div><b id="s1">0</b><span>مطعم</span></div><div><b id="s2">0</b><span>محافظة</span></div><div><b id="s3">0</b><span>طريق دولي</span></div></div>
+ </div>
+</header>
+<main id="m"></main>
+<nav id="nav"></nav>
+<div id="sheet"><div id="box"></div></div>
+<div class="toast" id="t"></div>
+<script>
+const ICON={
+list:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="7" height="7" rx="2"/><rect x="13.5" y="3.5" width="7" height="7" rx="2"/><rect x="3.5" y="13.5" width="7" height="7" rx="2"/><rect x="13.5" y="13.5" width="7" height="7" rx="2"/></svg>',
+plus:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>',
+bell:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 10a6 6 0 0 1 12 0c0 4 1.4 5.4 1.4 5.4H4.6S6 14 6 10Z"/><path d="M10 19.2a2 2 0 0 0 4 0"/></svg>',
+gear:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 13.5a7.6 7.6 0 0 0 0-3l2-1.4-2-3.4-2.3.8a7.6 7.6 0 0 0-2.6-1.5L14 2.5h-4l-.5 2.5a7.6 7.6 0 0 0-2.6 1.5l-2.3-.8-2 3.4 2 1.4a7.6 7.6 0 0 0 0 3l-2 1.4 2 3.4 2.3-.8a7.6 7.6 0 0 0 2.6 1.5l.5 2.5h4l.5-2.5a7.6 7.6 0 0 0 2.6-1.5l2.3.8 2-3.4-2-1.4Z"/></svg>'
+};
+const EMS=["🍖","🍗","🍢","🥙","🍲","🥘","🍛","🐟","🥬","🥟","☕","🍕","🍔","🍰"];
+const DEF={o:{g:[{n:"بغداد",a:["المنصور","حي الجامعة","حي العدل","حي اليرموك","حي الخضراء","الغزالية","العامرية","حي الجهاد","حي الشرطة","الدورة","البياع","حي العامل","الحرية","الشعلة","الحارثية","العلاوي","الصالحية","الكسرة","الكاظمية","الكرخ","أبو غريب","المحمودية","اللطيفية","التاجي","الطارمية","الأعظمية","الوزيرية","الكرادة","الجادرية","زيونة","بغداد الجديدة","حي أور","المشتل","حي الأمين","الشعب","مدينة الصدر","حي جميلة","الحبيبية","الزعفرانية","الباب الشرقي","الشورجة","الرصافة","الراشدية","المدائن (سلمان باك)","النهروان"]},{n:"نينوى",a:["الموصل القديمة","الساحل الأيمن","الساحل الأيسر","حي الزهور","حي المثنى","حي النور","حي الحدباء","تلعفر","سنجار","الحمدانية (قرة قوش)","تلكيف","الشيخان","عقرة","البعاج","القيارة","حمام العليل","مخمور","برطلة","بعشيقة"]},{n:"البصرة",a:["العشار","الكورنيش","الجمهورية","البراضعية","الجزائر","الجبيلة","الحيانية","التنومة","الطويسة","الهارثة","الزبير","أبو الخصيب","القرنة","المدينة","شط العرب","الفاو","سفوان","أم قصر"]},{n:"أربيل",a:["وسط المدينة (القلعة)","عنكاوة","بختياري","شارع 60","شارع 100","صلاح الدين","كوير","ميركسور","شقلاوة","سوران","رواندوز","كويسنجق"]},{n:"النجف",a:["وسط النجف","الكوفة","المناذرة","الحيدرية","الحيرة","المشخاب","العباسية"]},{n:"كربلاء",a:["وسط كربلاء","الهندية (طويريج)","عين التمر","الحسينية","الحر"]},{n:"السليمانية",a:["وسط المدينة","سالم","بكرجو","رانية","دوكان","بنجوين","جمجمال","كلار","دربندخان","شهرزور"]},{n:"كركوك",a:["القلعة","وسط المدينة","رحيم آوة","الواسطي","الحويجة","داقوق","دبس"]},{n:"دهوك",a:["وسط دهوك","زاخو","سميل","العمادية"]},{n:"صلاح الدين",a:["تكريت","سامراء","بيجي","بلد","الدور","الشرقاط","الطوز","الضلوعية","العلم"]},{n:"الأنبار",a:["الرمادي","الفلوجة","هيت","حديثة","القائم","الرطبة","عنه","راوة","الخالدية"]},{n:"ديالى",a:["بعقوبة","المقدادية","الخالص","بلدروز","خانقين","كفري","مندلي","جلولاء","السعدية"]},{n:"بابل",a:["الحلة","المحاويل","المسيب","الهاشمية","الإسكندرية","جرف الصخر"]},{n:"واسط",a:["الكوت","الصويرة","النعمانية","الحي","بدرة","العزيزية","الزبيدية","الشحيمية"]},{n:"ميسان",a:["العمارة","الميمونة","قلعة صالح","المجر الكبير","علي الغربي","الكحلاء","علي الشرقي"]},{n:"ذي قار",a:["الناصرية","الشطرة","سوق الشيوخ","الرفاعي","الغراف","الجبايش","النصر","قلعة سكر","الإصلاح","سيد دخيل","الفجر","الدواية"]},{n:"القادسية",a:["الديوانية","عفك","الشامية","الحمزة","الدغارة","السنية","غماس","الشافعية"]},{n:"المثنى",a:["السماوة","الرميثة","الخضر","السلمان","الوركاء","النجمي","الهلال"]},{n:"حلبجة",a:["حلبجة","خورمال","بيارة","سيروان"]}],em:EMS,rd:["بغداد–الموصل–زاخو","بغداد–كركوك–أربيل","بغداد–بعقوبة–خانقين","بغداد–كربلاء–النجف","بغداد–الحلة–الديوانية–السماوة–الناصرية–البصرة","بغداد–الكوت–العمارة–البصرة","بغداد–الرمادي–الرطبة","الموصل–أربيل","أربيل–السليمانية","كركوك–السليمانية"]},
+rs:[{id:1,n:"مطعم الباشا",g:"بغداد",a:"الكرادة",e:"🍖",d:"كباب ومشويات على الفحم.",ph:"07701234567",ad:"شارع الكرادة داخل",o:"11:00",c:"23:30",all:false,img:"",mn:[["كباب نصف كيلو","12000",""],["تكة","10000",""]],r:[]},
+{id:2,n:"باجة الموصل الأصيلة",g:"نينوى",a:"الموصل القديمة",e:"🍲",d:"باجة وكبة موصلية.",ph:"07509876543",ad:"قرب باب الطوب",o:"06:00",c:"15:00",all:false,img:"",mn:[["باجة","7000",""]],r:["بغداد–الموصل–زاخو"]}],
+st:{about:"تطبيق يجمع مطاعم العراق ويرتّبها حسب تقييمات الزبائن.",ph:"07700000000",em:"support@example.com"},nt:[]};
+let D;try{D=JSON.parse(localStorage.getItem("tzadm4")||"null")||JSON.parse(JSON.stringify(DEF))}catch(e){D=JSON.parse(JSON.stringify(DEF))}
+const save=()=>{try{localStorage.setItem("tzadm4",JSON.stringify(D))}catch(e){toast("المساحة ممتلئة، قلّل حجم الصور")}};
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+let tab="list",LG=0,LA="",ED=0,FM=null,NF={t:"",b:"",a:"all",g:0};
+const toast=x=>{const t=$("t");t.textContent=x;t.style.display="block";clearTimeout(t._h);t._h=setTimeout(()=>t.style.display="none",2000)};
+const T=[];for(let i=0;i<48;i++){const h=Math.floor(i/2),m=i%2?"30":"00";T.push([String(h).padStart(2,"0")+":"+m,(h%12||12)+":"+m+(h<12?" ص":" م")])}
+const tf=v=>(T.find(x=>x[0]==v)||[0,v])[1];
+const hrT=r=>r.all?"24 ساعة":(r.o&&r.c?tf(r.o)+" – "+tf(r.c):"");
+const gov=n=>D.o.g.find(x=>x.n==n)||{a:[]};
+const chip=(l,on,fn)=>`<button class="chip ${on?"on":""}" onclick="${fn}">${esc(l)}</button>`;
+const xchip=(l,fn)=>`<span class="chip x">${esc(l)}<b onclick="${fn}">✕</b></span>`;
+function pick(cb){const i=document.createElement("input");i.type="file";i.accept="image/*";i.onchange=()=>{const f=i.files[0];if(!f)return;const fr=new FileReader();fr.onload=()=>{const im=new Image();im.onload=()=>{const k=Math.min(1,640/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=im.width*k;c.height=im.height*k;c.getContext("2d").drawImage(im,0,0,c.width,c.height);cb(c.toDataURL("image/jpeg",.7))};im.src=fr.result};fr.readAsDataURL(f)};i.click()}
+
+function render(){
+ const m=$("m"),gs=D.o.g;
+ $("s1").textContent=D.rs.length;$("s2").textContent=gs.length;$("s3").textContent=D.o.rd.length;
+ if(tab=="list"){
+  if(LG>=gs.length)LG=0;const g=gs[LG]||{n:"",a:[]};
+  const l=D.rs.filter(r=>r.g==g.n&&(!LA||r.a==LA));
+  m.innerHTML=`<h3>المحافظة</h3><div class="chips">${gs.map((x,i)=>chip(x.n,i==LG,`LG=${i};LA='';render()`)).join("")}</div>
+  <h3>المنطقة</h3><div class="chips">${chip("كل المناطق",!LA,`LA='';render()`)}${g.a.map((a,i)=>chip(a,LA==a,`LA=D.o.g[${LG}].a[${i}];render()`)).join("")}</div>
+  <h3>${l.length} مطعم</h3>`+(l.length?l.map(r=>`<div class="card"><div class="row"><div class="img">${r.img?`<img src="${r.img}">`:esc(r.e)}</div><div style="flex:1"><b>${esc(r.n)}</b><div class="mut">${esc(r.a)}${r.r.length?" • "+r.r.map(esc).join("، "):""}</div></div></div><div class="row" style="margin-top:10px"><button class="sm" onclick="prev(${r.id})">👁️ معاينة</button><button class="sm" onclick="edit(${r.id})">✏️ تعديل</button><button class="sm d" onclick="del(${r.id})">🗑️ حذف</button></div></div>`).join(""):'<p class="mut">لا توجد مطاعم هنا.</p>');
+ }
+ if(tab=="form"){
+  const f=FM,g=gov(f.g);
+  m.innerHTML=`<h3>${ED?"تعديل مطعم":"إضافة مطعم جديد"}</h3><div class="card">
+  <div class="ph" onclick="pick(d=>{FM.img=d;render()})">${f.img?`<img src="${f.img}">`:"📷 اضغط لرفع صورة المطعم"}</div>${f.img?`<button class="sm d" style="margin-top:6px" onclick="FM.img='';render()">إزالة الصورة</button>`:""}
+  <input placeholder="اسم المطعم *" value="${esc(f.n)}" oninput="FM.n=this.value">
+  <div class="sel"><select onchange="FM.g=this.value;FM.a=gov(this.value).a[0]||'';render()">${gs.map(x=>`<option ${x.n==f.g?"selected":""}>${esc(x.n)}</option>`).join("")}</select>
+  <select onchange="FM.a=this.value">${g.a.map(a=>`<option ${a==f.a?"selected":""}>${esc(a)}</option>`).join("")}</select></div>
+  <h3>الرمز</h3><div class="chips">${D.o.em.map((x,i)=>`<span class="em ${x==f.e?"on":""}" onclick="FM.e=D.o.em[${i}];render()">${x}</span>`).join("")}</div>
+  <textarea rows="3" placeholder="وصف المطعم" oninput="FM.d=this.value">${esc(f.d)}</textarea>
+  <input placeholder="رقم الهاتف" inputmode="tel" value="${esc(f.ph)}" oninput="FM.ph=this.value">
+  <input placeholder="العنوان" value="${esc(f.ad)}" oninput="FM.ad=this.value">
+  <h3>ساعات العمل</h3><label class="ck"><input type="checkbox" ${f.all?"checked":""} onchange="FM.all=this.checked;render()"> 24 ساعة</label>
+  ${f.all?"":`<div class="sel"><select onchange="FM.o=this.value"><option value="">من</option>${T.map(t=>`<option value="${t[0]}" ${t[0]==f.o?"selected":""}>${t[1]}</option>`).join("")}</select><select onchange="FM.c=this.value"><option value="">إلى</option>${T.map(t=>`<option value="${t[0]}" ${t[0]==f.c?"selected":""}>${t[1]}</option>`).join("")}</select></div>`}
+  <h3>المنيو</h3>${f.mn.map((x,i)=>`<div class="mi"><div class="row"><div class="ph" style="width:64px;height:64px;flex:none;font-size:22px" onclick="pick(d=>{FM.mn[${i}][2]=d;render()})">${x[2]?`<img src="${x[2]}">`:"📷"}</div><div style="flex:1"><input placeholder="اسم الصنف" value="${esc(x[0])}" oninput="FM.mn[${i}][0]=this.value"><input placeholder="السعر" inputmode="numeric" value="${esc(x[1])}" oninput="FM.mn[${i}][1]=this.value"></div><button class="sm d" onclick="FM.mn.splice(${i},1);render()">✕</button></div></div>`).join("")}
+  <button class="sm" onclick="FM.mn.push(['','','']);render()">+ إضافة صنف</button>
+  <h3>الطرق الدولية</h3>${D.o.rd.map((r,i)=>`<label class="ck"><input type="checkbox" ${f.r.includes(r)?"checked":""} onchange="togR(${i})"> ${esc(r)}</label>`).join("")}
+  <button class="btn" onclick="saveR()">💾 حفظ</button><button class="btn s" onclick="ED=0;go('list')">إلغاء</button></div>`;
+ }
+ if(tab=="set"){
+  m.innerHTML=`<h3>قسم "حول" في تطبيق الزبون</h3><div class="card"><textarea rows="3" placeholder="نبذة عن التطبيق" oninput="D.st.about=this.value">${esc(D.st.about)}</textarea><input placeholder="هاتف الدعم" inputmode="tel" value="${esc(D.st.ph)}" oninput="D.st.ph=this.value"><input placeholder="إيميل الدعم" value="${esc(D.st.em)}" oninput="D.st.em=this.value"><button class="btn" onclick="save();toast('تم الحفظ')">💾 حفظ</button></div>
+  <h3>المحافظات والمناطق</h3>${gs.map((x,i)=>`<div class="card"><div class="row"><b style="flex:1">${esc(x.n)}</b><button class="sm d" onclick="delG(${i})">حذف المحافظة</button></div><div class="chips wrap">${x.a.map((a,j)=>xchip(a,`delA(${i},${j})`)).join("")}</div><div class="sel"><input id="na${i}" placeholder="منطقة أو حي جديد"><button class="sm" onclick="addA(${i})">+ إضافة</button></div></div>`).join("")}
+  <div class="card"><div class="sel"><input id="ng" placeholder="محافظة جديدة"><button class="sm" onclick="addG()">+ إضافة</button></div></div>
+  <h3>رموز الإيموجي</h3><div class="card"><div class="chips wrap">${D.o.em.map((x,i)=>xchip(x,`D.o.em.splice(${i},1);save();render()`)).join("")}</div><div class="sel"><input id="ne" placeholder="الصق إيموجي جديد"><button class="sm" onclick="addL('em','ne')">+ إضافة</button></div></div>
+  <h3>الطرق الدولية</h3><div class="card"><div class="chips wrap">${D.o.rd.map((x,i)=>xchip(x,`D.o.rd.splice(${i},1);save();render()`)).join("")}</div><div class="sel"><input id="nr" placeholder="طريق جديد، مثل بغداد–تكريت"><button class="sm" onclick="addL('rd','nr')">+ إضافة</button></div></div>`;
+ }
+ if(tab=="ntf"){m.innerHTML=ntfHTML();pv()}
+ $("nav").innerHTML=[["list",ICON.list,"المطاعم"],["form",ICON.plus,"إضافة"],["ntf",ICON.bell,"إشعارات"],["set",ICON.gear,"الإعدادات"]].map(t=>`<button class="${tab==t[0]?"on":""}" onclick="${t[0]=="form"?"ED=0;":""}go('${t[0]}')"><span class="ic">${t[1]}</span><em>${t[2]}</em></button>`).join("");
+}
+function ntfHTML(){const gs=D.o.g;return `<h3>إرسال إشعار للزبائن</h3><div class="card"><input placeholder="عنوان الإشعار" value="${esc(NF.t)}" oninput="NF.t=this.value;pv()"><textarea rows="3" placeholder="نص الإشعار" oninput="NF.b=this.value;pv()">${esc(NF.b)}</textarea><div class="mut">الجمهور المستهدف</div><select onchange="NF.a=this.value;render()"><option value="all" ${NF.a=="all"?"selected":""}>كل المستخدمين</option><option value="gov" ${NF.a=="gov"?"selected":""}>زبائن محافظة معينة</option></select>${NF.a=="gov"?`<select onchange="NF.g=+this.value">${gs.map((x,i)=>`<option value="${i}" ${i==NF.g?"selected":""}>${esc(x.n)}</option>`).join("")}</select>`:""}<div class="mut" style="margin-top:8px">معاينة</div><div class="card" id="pv" style="background:var(--chip)"></div><button class="btn" onclick="sendN()">🔔 إرسال (تجريبي)</button></div><h3>الإشعارات السابقة</h3>${(D.nt||[]).length?D.nt.map(x=>`<div class="card"><b>${esc(x.t)}</b><div class="mut">${esc(x.b)}</div><div class="mut" style="margin-top:4px">👥 ${esc(x.w)} • ${esc(x.d)}</div></div>`).join(""):'<p class="mut">لا توجد إشعارات سابقة.</p>'}`}
+function pv(){const e=$("pv");if(e)e.innerHTML=`<div class="row"><div class="img" style="width:38px;height:38px;font-size:18px">🍽️</div><div><b>${esc(NF.t)||"عنوان الإشعار"}</b><div class="mut">${esc(NF.b)||"نص الإشعار يظهر هنا"}</div></div></div><div class="mut" style="margin-top:6px">تذوق • الآن</div>`}
+function sendN(){if(!NF.t.trim()||!NF.b.trim()){alert("اكتب العنوان والنص");return}
+ (D.nt=D.nt||[]).unshift({t:NF.t.trim(),b:NF.b.trim(),w:NF.a=="all"?"كل المستخدمين":"زبائن "+(D.o.g[NF.g]||{n:""}).n,d:new Date().toLocaleString("ar-IQ")});
+ NF.t="";NF.b="";save();render();toast("نموذج فقط: لم يُرسل إشعار حقيقي")}
+function blank(){const g=D.o.g[0]||{n:"",a:[]};return{n:"",g:g.n,a:g.a[0]||"",e:D.o.em[0]||"",d:"",ph:"",ad:"",o:"",c:"",all:false,img:"",mn:[],r:[]}}
+function go(t){tab=t;if(t=="form")FM=ED?JSON.parse(JSON.stringify(D.rs.find(r=>r.id==ED))):blank();render();$("m").scrollTop=0;window.scrollTo(0,0)}
+function togR(i){const r=D.o.rd[i],k=FM.r.indexOf(r);k<0?FM.r.push(r):FM.r.splice(k,1)}
+function edit(id){ED=id;go("form")}
+function del(id){if(confirm("حذف هذا المطعم؟")){D.rs=D.rs.filter(r=>r.id!=id);save();render();toast("تم الحذف")}}
+function saveR(){
+ if(!FM.n.trim()||!FM.a){alert("اكتب اسم المطعم واختر المنطقة");return}
+ const o={...FM,n:FM.n.trim(),mn:FM.mn.filter(x=>x[0].trim()),id:ED||Date.now()};
+ D.rs=ED?D.rs.map(r=>r.id==ED?o:r):D.rs.concat(o);
+ save();ED=0;tab="list";LG=Math.max(0,D.o.g.findIndex(x=>x.n==o.g));LA="";render();toast("تم الحفظ")
+}
+function addG(){const v=$("ng").value.trim();if(!v)return;if(D.o.g.some(x=>x.n==v)){toast("موجودة مسبقاً");return}D.o.g.push({n:v,a:[]});save();render()}
+function delG(i){const n=D.o.g[i].n;if(D.rs.some(r=>r.g==n)){alert("لا يمكن حذفها، فيها مطاعم");return}if(confirm("حذف المحافظة؟")){D.o.g.splice(i,1);save();render()}}
+function addA(i){const v=$("na"+i).value.trim();if(!v)return;D.o.g[i].a.push(v);save();render()}
+function delA(i,j){const g=D.o.g[i];if(D.rs.some(r=>r.g==g.n&&r.a==g.a[j])){alert("لا يمكن حذفها، فيها مطاعم");return}g.a.splice(j,1);save();render()}
+function addL(k,id){const v=$(id).value.trim();if(!v)return;D.o[k].push(v);save();render()}
+function prev(id){
+ const r=D.rs.find(x=>x.id==id),h=hrT(r);
+ $("box").innerHTML=`<div class="mut" style="margin-bottom:10px">👁️ هكذا تظهر صفحة المطعم للزبون</div><div class="hero">${r.img?`<img src="${r.img}">`:esc(r.e)}</div><h3 style="font-size:20px;color:var(--tx)">${esc(r.n)}</h3><div class="mut">${esc(r.a)}، ${esc(r.g)}</div>${r.d?`<p style="margin:8px 0">${esc(r.d)}</p>`:""}
+ ${r.ph||r.ad||h?`<div class="card">${r.ph?`📞 ${esc(r.ph)}<br>`:""}${r.ad?`📍 ${esc(r.ad)}<br>`:""}${h?`🕒 ${h}`:""}</div>`:""}
+ ${r.mn.length?`<h3>المنيو</h3><div class="card">${r.mn.map(x=>`<div class="row" style="padding:6px 0">${x[2]?`<img class="img" style="width:40px;height:40px" src="${x[2]}">`:""}<span style="flex:1">${esc(x[0])}</span><b>${esc(x[1])}</b></div>`).join("")}</div>`:'<p class="mut">لم يُضف منيو بعد.</p>'}
+ <button class="btn s" onclick="$('sheet').classList.remove('show')">إغلاق</button>`;
+ $("sheet").classList.add("show");
+}
+$("sheet").addEventListener("click",e=>{if(e.target.id=="sheet")$("sheet").classList.remove("show")});
+render();
+</script>
+</body>
+</html>
